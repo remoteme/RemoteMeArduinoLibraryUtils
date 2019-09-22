@@ -35,7 +35,7 @@ class RemoteMeWebSocketConnector : public RemoteMeConnector
 		
 		
 		void loop();
-		void waitForConnection();
+		bool waitForConnection();
 		void disconnect();
 		void send(uint8_t * payload, uint16_t size);
 		

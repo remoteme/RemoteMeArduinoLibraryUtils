@@ -42,7 +42,7 @@ String  RemoteMeWebSocketConnector::getIp() {
 	}
 
 	
-	void RemoteMeWebSocketConnector::waitForConnection() {
+	bool RemoteMeWebSocketConnector::waitForConnection() {
 		static unsigned long lastTimePing = 0;
 
 		if (lastTimePing + PING_SEND < deltaMillis() && webSocketConnected) {
@@ -73,7 +73,7 @@ String  RemoteMeWebSocketConnector::getIp() {
 			webSocket->onEvent(RemoteMeWebSocketConnector::webSocketEvent);
 			lastTimePingReceived = deltaMillis() + PING_RECEIVE_TIMEOUT;
 			int continousReconnect = 0;
-			while (!webSocketConnected) {
+			if (!webSocketConnected) {
 				if (continousReconnect++>3000){//5min
 					DEBUG_REMOTEME("[RMM] restarting\n");
 					ESP.restart();
@@ -86,6 +86,7 @@ String  RemoteMeWebSocketConnector::getIp() {
 			sendVariableObserveMessage();
 		}
 		
+		return true;
 		
 	}
 
